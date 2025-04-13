@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@bitcamp/myproject-common"],
   async headers() {
     return [
       {

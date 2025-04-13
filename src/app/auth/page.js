@@ -2,11 +2,11 @@
 
 import { useRef, useState } from "react";
 import "../globals.css";
-import { useAuth } from "components/AuthProvider";
-import { useRemoteRouter } from 'hooks/useRemoteRouter';
+import { useAuth } from "common/components/AuthProvider";
+import { useRouter } from "next/navigation";
 
 export default function Auth() {
-  const [sendMessage] = useRemoteRouter("http://localhost:3000");
+  const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
   const { setToken } = useAuth();
   const txtEmail = useRef();
@@ -30,13 +30,12 @@ export default function Auth() {
 
       if (result.status == "success") {
         setToken(result.data); // JWT 토큰을 AuthProvider에 저장
-        sendMessage({type: "redirect", payload: "/"}); // 리모트 라우터에 메시지 전송
+        router.push("http://localhost:3010/"); // 로그인 성공 시 메인 페이지로 이동
         
       } else {
         setErrorMessage("사용자 인증 실패!");
       }
     } catch (error) {
-      // 서버와의 통신 오류 발생!
       console.log(error);
     }
   }
