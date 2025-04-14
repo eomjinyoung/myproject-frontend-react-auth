@@ -1,64 +1,87 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import "../globals.css";
 import { useAuth } from "common/components/AuthProvider";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function Auth() {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
   const { setToken } = useAuth();
-  const txtEmail = useRef();
-  const txtPassword = useRef();
-  const chkSaveEmail = useRef();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [saveEmail, setSaveEmail] = useState(false);
 
-  async function submit(e) {
-    e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:8010/auth/login", {
-        method: "POST",
-        body: new URLSearchParams({
-          email: txtEmail.current.value,
-          password: txtPassword.current.value,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("로그인 요청 실패!");
-      }
-      const result = await response.json();
-
-      if (result.status == "success") {
-        setToken(result.data); // JWT 토큰을 AuthProvider에 저장
-        router.push("http://localhost:3010/"); // 로그인 성공 시 메인 페이지로 이동
-        
-      } else {
-        setErrorMessage("사용자 인증 실패!");
-      }
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    const email = Cookies.get("email");
+    if (email) {
+      setEmail(email);
+      setSaveEmail(true);
     }
-  }
+  }, []);
+
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+
+      if (saveEmail) {
+        Cookies.set("email", email, { expires: 7 });
+      } else {
+        Cookies.remove("email");
+      }
+
+      try {
+        const response = await fetch("http://localhost:8010/auth/login", {
+          method: "POST",
+          body: new URLSearchParams({
+            email: email,
+            password: password,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error("로그인 요청 실패!");
+        }
+        const result = await response.json();
+
+        if (result.status == "success") {
+          setToken(result.data); // JWT 토큰을 AuthProvider에 저장
+          router.push("http://localhost:3010/"); // 로그인 성공 시 메인 페이지로 이동
+        } else {
+          setErrorMessage("사용자 인증 실패!");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [email, password, saveEmail]
+  );
 
   return (
     <>
       <h2>로그인</h2>
-      {errorMessage && (
-      <p className='error'>
-        사용자 인증 실패!
-      </p>
-      )}
-      <form onSubmit={submit}>
+      {errorMessage && <p className='error'>사용자 인증 실패!</p>}
+      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor='email'>이메일:</label>
-          <input ref={txtEmail} type='email' required />
+          <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div>
           <label htmlFor='password'>암호:</label>
-          <input ref={txtPassword} type='password' required />
+          <input
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </div>
         <div>
-          <input ref={chkSaveEmail} type='checkbox' />
+          <input
+            type='checkbox'
+            checked={saveEmail}
+            onChange={(e) => setSaveEmail(e.target.checked)}
+          />
           <label htmlFor='saveEmail'>이메일 저장</label>
         </div>
         <div>
