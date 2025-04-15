@@ -33,7 +33,7 @@ export default function Auth() {
       }
 
       try {
-        const response = await fetch("${process.env.NEXT_PUBLIC_AUTH_REST_API_URL}/auth/login", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_REST_API_URL}/auth/login`, {
           method: "POST",
           body: new URLSearchParams({
             email: email,
@@ -47,7 +47,7 @@ export default function Auth() {
 
         if (result.status == "success") {
           setToken(result.data); // JWT 토큰을 AuthProvider에 저장
-          router.push("http://localhost:3010/"); // 로그인 성공 시 메인 페이지로 이동
+          router.push(`${process.env.NEXT_PUBLIC_AUTH_UI_URL}/`); // 로그인 성공 시 메인 페이지로 이동
         } else {
           setErrorMessage("사용자 인증 실패!");
         }

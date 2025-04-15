@@ -1,3 +1,102 @@
+# myproject-frontend-react-auth
+
+## 설정
+
+### `.env.local`, `env.production` 파일
+
+`.env.local` : 로컬에서 개발할 때 사용하는 환경 변수
+
+```properties
+# Backend Server
+NEXT_PUBLIC_AUTH_REST_API_URL=http://localhost:8010
+NEXT_PUBLIC_BOARD_REST_API_URL=http://localhost:8020
+
+# Frontend Server
+NEXT_PUBLIC_AUTH_UI_URL=http://localhost:3010
+NEXT_PUBLIC_BOARD_UI_URL=http://localhost:3020
+```
+
+`.env.production` : 서버에 배포할 때 사용하는 환경 변수
+
+```properties
+# Backend Server
+NEXT_PUBLIC_AUTH_REST_API_URL=http://110.165.18.171:8010
+NEXT_PUBLIC_BOARD_REST_API_URL=http://110.165.18.171:8020
+
+# Frontend Server
+NEXT_PUBLIC_AUTH_UI_URL=http://110.165.18.171:3010
+NEXT_PUBLIC_BOARD_UI_URL=http://110.165.18.171:3020
+```
+
+`NEXT_PUBLIC_` 접두사를 붙여야 웹브라우저에서 접근 가능
+
+#### 환경변수 사용
+
+```js
+fetch(`${NEXT_PUBLIC_AUTH_REST_API_URL}/auth/login`, ...)
+```
+
+#### next.js 에서 `.env` 파일을 읽는 순서
+
+1. `.env.local` : 로컬 개발 환경 전용(git에서 제외)
+2. `.env.development` : 개발 환경
+3. `.env.production` : 배포 환경
+4. `.env` : 모든 환경(기본 값)
+
+## 도커 이미지 생성
+
+### `.dockerignore`
+
+Docker 빌드 시 포함하지 않을 파일/디렉터리를 지정.
+
+- 이미지 크기 줄이기
+  - 불필요한 파일은 빌드 컨텍스트에서 제외되니까 최종 이미지가 가벼워짐.
+- 빌드 속도 향상
+  - Docker는 .dockerignore에 포함된 파일은 전송하지 않아서 복사 속도 빨라짐.
+- 보안 강화
+  - .env.local, 인증 키, 개발용 설정파일 등이 이미지에 포함되지 않게 막을 수 있음.
+
+```
+node_modules
+.env
+.env.local
+Dockerfile
+.dockerignore
+.git
+.gitignore
+*.log
+```
+
+### `Dockerfile`
+
+```
+FROM node:lts
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 3010
+
+CMD ["npm", "run", "start"]
+```
+
+### 이미지 생성
+
+```bash
+docker build -t myproject-frontend-auth .
+docker run -p 3010:3010 --env-file .env.production --name auth-app myproject-frontend-auth
+```
+
+## 도커 컨테이너 실행
+
+##
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
