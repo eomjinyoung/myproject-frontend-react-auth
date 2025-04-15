@@ -46,6 +46,7 @@ export default function Auth() {
         const result = await response.json();
 
         if (result.status == "success") {
+          console.log("로그인 성공!");
           setToken(result.data); // JWT 토큰을 AuthProvider에 저장
           router.push(`${process.env.NEXT_PUBLIC_AUTH_UI_URL}/`); // 로그인 성공 시 메인 페이지로 이동
         } else {
