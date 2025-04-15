@@ -6,6 +6,24 @@
 git submodule update --init --recursive
 ```
 
+## 공통 모듈 가져오기
+
+### git 저장소를 처음 clone 했을 때
+
+다음을 실행하여 공통 모듈을 가져온다.
+
+```bash
+git submodule update --init --recursive
+```
+
+### git 저장소를 가져온 후
+
+공통 모듈을 최신 버전으로 갱신한다.
+
+```bash
+git submodule update --remote
+```
+
 ## 설정
 
 ### `.env.local`, `env.production` 파일
