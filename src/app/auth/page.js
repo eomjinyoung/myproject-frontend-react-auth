@@ -33,7 +33,7 @@ export default function Auth() {
       }
 
       try {
-        const response = await fetch("http://localhost:8010/auth/login", {
+        const response = await fetch("${process.env.NEXT_PUBLIC_AUTH_REST_API_URL}/auth/login", {
           method: "POST",
           body: new URLSearchParams({
             email: email,
