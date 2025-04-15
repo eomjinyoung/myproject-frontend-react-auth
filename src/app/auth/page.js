@@ -64,6 +64,7 @@ export default function Auth() {
       {errorMessage && <p className='error'>사용자 인증 실패!</p>}
       <form onSubmit={handleSubmit}>
         <div>
+          `${process.env.NEXT_PUBLIC_AUTH_UI_URL}/members`
           <label htmlFor='email'>이메일:</label>
           <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>

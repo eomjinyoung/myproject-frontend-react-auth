@@ -1,5 +1,11 @@
 # myproject-frontend-react-auth
 
+## 공통 모듈 가져오기
+
+```bash
+git submodule update --init --recursive
+```
+
 ## 설정
 
 ### `.env.local`, `env.production` 파일
@@ -42,6 +48,12 @@ fetch(`${NEXT_PUBLIC_AUTH_REST_API_URL}/auth/login`, ...)
 2. `.env.development` : 개발 환경
 3. `.env.production` : 배포 환경
 4. `.env` : 모든 환경(기본 값)
+
+## 모듈 설치
+
+```bash
+npm install
+```
 
 ## 도커 이미지 생성
 
