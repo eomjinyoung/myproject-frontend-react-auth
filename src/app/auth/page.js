@@ -4,19 +4,16 @@ import { useEffect, useState, useCallback } from "react";
 import "../globals.css";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { useToken } from "common/hooks/useToken";
 
 export default function Auth() {
-  const [token, setToken] = useToken();
+  const [token, setToken] = useState();
   const [errorMessage, setErrorMessage] = useState("");
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [saveEmail, setSaveEmail] = useState(false);
 
   useEffect(() => {
     if (!token) return;
-
     console.log("메인 화면으로 이동!");
     window.location.href = `${process.env.NEXT_PUBLIC_AUTH_UI_URL}/`;
   }, [token]);
@@ -55,7 +52,18 @@ export default function Auth() {
 
         if (result.status == "success") {
           console.log("로그인 성공!");
-          setToken(result.data); // JWT 토큰을 AuthProvider에 저장
+          console.log("JWT 토큰을 쿠키에 저장");
+          Cookies.set("jwt_token", result.data, {
+            path: "/",
+            domain: "localhost",
+            // Non-HTTPS:
+            // sameSite: "Lax",
+            // secure: false,
+            // HTTPS:
+            sameSite: "None", // HTTPS 환경일 때
+            secure: true, // HTTPS 환경일 때
+          });
+          setToken(result.data);
         } else {
           setErrorMessage("사용자 인증 실패!");
         }
