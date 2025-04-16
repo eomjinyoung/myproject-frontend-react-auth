@@ -57,7 +57,7 @@ export default function Auth() {
             path: "/",
 
             //domain: "localhost",
-            domain: "110.165.18.171",
+            //domain: "110.165.18.171",
 
             // Non-HTTPS:
             sameSite: "Lax",
