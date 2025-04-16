@@ -84,6 +84,7 @@ Docker 빌드 시 포함하지 않을 파일/디렉터리를 지정.
 node_modules
 .env
 .env.local
+.env.production
 Dockerfile
 .dockerignore
 .git
@@ -114,10 +115,13 @@ CMD ["npm", "run", "start"]
 
 ```bash
 docker build -t myproject-frontend-auth .
-docker run -p 3010:3010 --env-file .env.production --name auth-app myproject-frontend-auth
 ```
 
 ## 도커 컨테이너 실행
+
+```bash
+docker run -p 3010:3010 --name auth-ui myproject-frontend-auth
+```
 
 ##
 
