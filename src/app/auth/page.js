@@ -60,12 +60,12 @@ export default function Auth() {
             domain: "110.165.18.171",
 
             // Non-HTTPS:
-            // sameSite: "Lax",
-            // secure: false,
+            sameSite: "Lax",
+            secure: false,
 
             // HTTPS:
-            sameSite: "None", // HTTPS 환경일 때
-            secure: true, // HTTPS 환경일 때
+            // sameSite: "None", // HTTPS 환경일 때
+            // secure: true, // HTTPS 환경일 때
           });
           setToken(result.data);
         } else {
