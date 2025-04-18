@@ -199,7 +199,7 @@ spec:
         - name: auth-ui
           image: lo20hyy7.kr.private-ncr.ntruss.com/myproject-frontend-auth
           ports:
-            - containerPort: 3010
+            - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
@@ -212,9 +212,10 @@ spec:
     app: auth-ui
   ports:
     - protocol: TCP
-      port: 3010
-      targetPort: 3010
-  type: LoadBalancer
+      port: 3000
+      targetPort: 3000
+      nodePort: 30130
+  type: NodePort
 ```
 
 도커 이미지를 지정할 때 Private Endpoint 를 사용하면, 내부 통신으로 다뤄진다.
