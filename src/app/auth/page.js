@@ -58,6 +58,7 @@ export default function Auth() {
 
             //domain: "localhost",
             //domain: "110.165.18.171",
+            domain: ".eomcs.com",
 
             // Non-HTTPS:
             sameSite: "Lax",
